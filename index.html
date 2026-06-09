@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chandralekha E-Commerce Store</title>
+<style>
+body{
+    font-family:Arial;
+    margin:0;
+    background:#f4f4f4
+}
+header{
+    background:#2874f0;
+    color:white;
+    padding:15px;
+    text-align:center
+}
+.top{
+    text-align:center;
+    padding:10px
+}
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+    padding:15px
+}
+.product{
+    background:white;
+    padding:10px;
+    border-radius:8px;
+    text-align:center;
+    box-shadow:0 2px 5px rgba(0,0,0,.2)
+}
+.product img{
+    width:100%;
+    height:180px;
+    object-fit:contain;
+    cursor:pointer
+}
+button{
+    padding:8px;
+    margin:4px;
+    border:none;
+    border-radius:4px;
+    cursor:pointer
+}
+.cart{
+    background:green;
+    color:white
+}
+.buy{
+    background:orange;
+    color:white
+}
+.wish{
+    background:red;
+    color:white
+}
+.dark{
+    background:#111;
+    color:white
+}
+.dark .product{
+    background:#222;
+    color:white
+}
+#modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7)
+}
+#box{
+    background:white;
+    max-width:500px;
+     margin:80px auto;
+    padding:20px
+}
+
+.controls{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    padding:15px
+}
+.controls input,.controls select{
+    padding:10px;
+    border-radius:5px
+}
+@media(max-width:768px){
+.controls{flex-direction:column;align-items:center}
+.controls input,.controls select{width:90%}
+.products{grid-template-columns:1fr}
+button{width:100%}
+}
+</style>
+</head>
+<body>
+<header>
+<h1>Chandralekha E-Commerce Store</h1>
+<h3>Cart Items: <span id="count">0</span> | Total ₹<span id="total">0</span></h3>
+</div>
+</header>
+<div class="top"><button onclick="toggleDark()">🌙 Dark Mode</button></div>
+<div class="controls">
+<input type="text" id="searchBar" placeholder="Search Products..." onkeyup="searchProducts()">
+<select id="categoryFilter" onchange="filterProducts()">
+<option value="all">All Categories</option>
+<option value="Electronics">Electronics</option>
+<option value="Fashion">Fashion</option>
+</select>
+<select id="sortPrice" onchange="sortProducts()">
+<option value="">Sort Price</option>
+<option value="low">Low To High</option>
+<option value="high">High To Low</option>
+</select>
+<button onclick="clearCart()">Clear Cart</button>
+</div>
+<div class="products" id="products"></div>
+
+<div id="modal"><div id="box">
+<button onclick="closeModal()">Close</button>
+<h2 id="pn"></h2><p id="pp"></p><p id="pb"></p><p id="pr"></p><p id="pf"></p><p id="pw"></p>
+</div></div>
+
+<script>
+const data=[
+['mobile.jpg','Mobile Phone',24999,loading='lazy'],
+['laptop.jpg','Laptop',49999,loading='lazy'],
+['watch.jpg','Smart Watch',1999,loading='lazy'],
+['headphones.jpg','Headphones',1499,loading='lazy'],
+['earbuds.jpg','Earbuds',1299,loading='lazy'],
+['camera.jpg','Camera',28999,loading='lazy'],
+['speaker.jpg','Speaker',2499,loading='lazy'],
+['keyboard.jpg','Keyboard',999,loading='lazy'],
+['mouse.jpg','Mouse',699,loading='lazy'],
+['powerbank.jpg','Power Bank',1499,loading='lazy'],
+['tablet.jpg','Tablet',19999,loading='lazy'],
+['monitor.jpg','Monitor',12999,loading='lazy'],
+['printer.jpg','Printer',8999,loading='lazy'],
+['tv.jpg','Smart TV',39999,loading='lazy'],
+['fridge.jpg','Refrigerator',25999,loading='lazy'],
+['washingmachine.jpg','Washing Machine',22999,loading='lazy'],
+['ac.jpg','Air Conditioner',32999,loading='lazy'],
+['router.jpg','Router',2499,loading='lazy'],
+['projector.jpg','Projector',18999,loading='lazy'],
+['fitness.jpg','Fitness Band',1999,loading='lazy'],
+['saree.jpg','Saree',1499,loading='lazy'],
+['jeans.jpg','Jeans',999,loading='lazy'],
+['shoes.jpg','Shoes',2499,loading='lazy'],
+['jewelry.jpg','Jewelry',4999,loading='lazy']
+];
+let html='';
+data.forEach(p=>{
+html+=`<div class="product">
+<img src="images/${p[0]}" loading="${p[4]}" onclick="showDetails('${p[1]}','₹${p[2]}','Brand','4.5/5','Premium Quality','1 Year Warranty')">
+<h3>${p[1]}</h3><p>₹${p[2]}</p>
+<button class="cart" onclick="addToCart('${p[1]}',${p[2]})">Add to Cart</button>
+<button class="buy" onclick="buyNow('${p[1]}',${p[2]})">Buy Now</button>
+<button class="wish" onclick="wishlist()">Wishlist</button>
+</div>`;
+});
+products.innerHTML=html;
+
+let count=0,total=0;
+function addToCart(name, price){
+
+count++;
+total += price;
+
+countEl.textContent = count;
+totalEl.textContent = total;
+
+cartItems.push(name + " - ₹" + price);
+
+document.getElementById("cartItems").innerHTML =
+cartItems.map(item => "<li>" + item + "</li>").join("");
+
+alert(name + " added to cart!");
+
+}
+function wishlist(){
+    alert('Added to Wishlist ❤️');
+}
+function buyNow(n,p){
+    alert('Proceed to Payment\n'+n+'\nAmount: ₹'+p);
+}
+function toggleDark(){
+    document.body.classList.toggle('dark');
+}
+function showDetails(n,p,b,r,f,w){
+pn.innerText=n;pp.innerText='Price: '+p;pb.innerText='Brand: '+b;pr.innerText='Rating: '+r;pf.innerText='Features: '+f;pw.innerText='Warranty: '+w;
+modal.style.display='block';
+}
+function closeModal(){
+    modal.style.display='none';
+}
+const countEl=document.getElementById('count');
+const totalEl=document.getElementById('total');
+
+function searchProducts(){
+let value=document.getElementById('searchBar').value.toLowerCase();
+document.querySelectorAll('.product').forEach(p=>{
+p.style.display=p.innerText.toLowerCase().includes(value)?'block':'none';
+});
+}
+
+function filterProducts(){
+let c=document.getElementById('categoryFilter').value;
+document.querySelectorAll('.product').forEach(p=>{
+let t=p.innerText;
+if(c==='all') p.style.display='block';
+else if(c==='Fashion' && (t.includes('Saree')||t.includes('Jeans')||t.includes('Shoes')||t.includes('Jewelry'))) p.style.display='block';
+else if(c==='Electronics' && !(t.includes('Saree')||t.includes('Jeans')||t.includes('Shoes')||t.includes('Jewelry'))) p.style.display='block';
+else p.style.display='none';
+});
+}
+
+function sortProducts(){
+let container=document.getElementById('products');
+let items=Array.from(document.querySelectorAll('.product'));
+let order=document.getElementById('sortPrice').value;
+items.sort((a,b)=>{
+let ap=Number(a.querySelector('p').innerText.replace('₹',''));
+let bp=Number(b.querySelector('p').innerText.replace('₹',''));
+return order==='low'?ap-bp:bp-ap;
+});
+items.forEach(i=>container.appendChild(i));
+}
+
+function clearCart(){
+count=0; 
+total=0;
+countEl.textContent=0;
+totalEl.textContent=0;
+alert('Cart Cleared');
+}
+
+</script>
+</body>
+</html>
